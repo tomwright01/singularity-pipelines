@@ -1,0 +1,48 @@
+Bootstrap: debootstrap
+MirrorURL: ftp://ftp.ca.debian.org/debian/
+OSVersion: jessie
+Include: apt-utils
+
+%setup
+	echo "Installing runscript"
+	cp dtiprep.py ${SINGULARITY_ROOTFS}/opt/dtiprep.py
+	chmod 775 ${SINGULARITY_ROOTFS}/dtiprep.py
+	exit 0
+
+%post
+	echo "Installing packages"
+	apt-get update
+	apt-get install -y \
+		libglu1.mesa \
+		libjpeg62 \
+		libjpeg62 \
+		mriconvert \
+		python \
+		tar \
+		vim-tiny \
+		wget
+	rm -rf /var/lib/apt/lists
+
+	echo "Getting DTIPrep"
+	cd /opt
+	wget https://www.nitrc.org/frs/download.php/6630/DTIPrep1.2.4_linux64.tar.gz -O dtiprep.tar.gz
+	tar -xf dtiprep.tar.gz
+	rm dtiprep.tar.gz
+
+
+
+	mkdir /input
+	mkdir /output
+
+	exit 0
+
+%runscript
+	if [ -z $0 ]
+		then
+			echo "DTIPrep Container"
+			echo "USAGE:"
+			echo "singularity run <container> <subject_id>"
+			return 1
+	fi
+	echo "Arguments received: $*"
+	/opt/dtiprep.py "$@"
