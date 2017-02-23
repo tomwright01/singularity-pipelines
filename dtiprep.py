@@ -41,18 +41,18 @@ def dtiprep(nrrdFile, outDir):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Run DTIPrep on a DTI File")
-    parser.add_argument("subject", help="Subject ID")
-    parser.add_argument("--dicomDir", dest="dicomDir", help="dicom directory")
+    parser.add_argument("nrrdFile", help="nrrdFile")
+    parser.add_argument("--nrrdDir", dest="nrrdDir", help="nrrd directory")
     parser.add_argument("--outDir", dest="outDir", help="output directory")
     args = parser.parse_args()
 
-    if not args.dicomDir:
-        args.dicomDir = '/input'
+    if not args.nrrdDir:
+        args.nrrdDir = '/input'
     if not args.outDir:
         args.outDir = '/output'
 
-    nrrdFile = dicom2nrrd(args.dicomDir,
-                          args.outDir,
-                          args.subject)
-
+    nrrdFile = os.path.join(args.nrrdDir, args.nrrdFile)
+    #nrrdFile = dicom2nrrd(args.dicomDir,
+    #                      args.outDir,
+    #                      args.subject)
     qcfile, xmlfile = dtiprep(nrrdFile, args.outDir)
