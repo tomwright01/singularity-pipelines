@@ -57,12 +57,19 @@ I have based this image on Debian Jessie, apt-get is then used to install some
 additional libraries.
 
  - Build the docker image
+
     $ docker build -t dtiprep-base .
+
 - Find the *Image ID*
+
     $ docker images
+
 - Tag the image with the name of the repository
+
     $ docker tag <image id> maladmin/dtiprep-base:latest
+
 - Upload the image to docker hub
+
     $ docker push maladmin/dtiprep-base
 
 ### Create the singularity container
@@ -71,11 +78,13 @@ An empty container needs to be created at the first run. Future runs will
 overwrite the existing container.
 
 - Create the empty container
+
     $ sudo singularity create singularity-dtiprep.img
 
 The singularity container is defined in the file bootstrap_qa.def
 
 - Fill the container
+
     $ sudo singularity bootstrap singularity-dtiprep.img bootstrap_qa.def
 
 ## Running the singularity container
@@ -98,6 +107,7 @@ The file launch_dtiprep.py will process our existing filesystem and submit multi
 ## Notes
 
 It is simple to get a read-only shell within the singularity container:
+
     $ singularity shell singularity-dtiprep.img
 
 A writeable shell is useful for development, but changes made should be reflected back to
