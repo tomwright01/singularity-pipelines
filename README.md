@@ -47,8 +47,10 @@ The following has been tested on a system running Ubuntu 14.0.4
 ### Create a repo on docker hub
 
 The instructions below assume the repo is `maladmin/dtiprep-base`.
+
 - Login to docker hub
-    $ docker login
+
+    ```$ docker login```
 
 ### Create a docker image and upload to docker hub
 
