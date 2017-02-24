@@ -60,19 +60,19 @@ additional libraries.
 
  - Build the docker image
 
-    $ docker build -t dtiprep-base .
+    ```$ docker build -t dtiprep-base .```
 
 - Find the *Image ID*
 
-    $ docker images
+    ```$ docker images```
 
 - Tag the image with the name of the repository
 
-    $ docker tag <image id> maladmin/dtiprep-base:latest
+    ```$ docker tag <image id> maladmin/dtiprep-base:latest```
 
 - Upload the image to docker hub
 
-    $ docker push maladmin/dtiprep-base
+    ```$ docker push maladmin/dtiprep-base```
 
 ### Create the singularity container
 
@@ -81,13 +81,13 @@ overwrite the existing container.
 
 - Create the empty container
 
-    $ sudo singularity create singularity-dtiprep.img
+    ```$ sudo singularity create singularity-dtiprep.img```
 
 The singularity container is defined in the file bootstrap_qa.def
 
 - Fill the container
 
-    $ sudo singularity bootstrap singularity-dtiprep.img bootstrap_qa.def
+    ```$ sudo singularity bootstrap singularity-dtiprep.img bootstrap_qa.def```
 
 ## Running the singularity container
 
@@ -102,7 +102,7 @@ The python script `dtiprep.py` uses two hard coded directories `/input` and `/ou
 These directories can be dynamically mapped to the host operating system when the container
 is run using the -B flag.
 
-    $ singularity run -B <path to input file>:/input -B <path to output>:/output singularity-dtiprep.img
+    ```$ singularity run -B <path to input file>:/input -B <path to output>:/output singularity-dtiprep.img```
 
 The file launch_dtiprep.py will process our existing filesystem and submit multiple jobs using qsub.
 
@@ -110,9 +110,9 @@ The file launch_dtiprep.py will process our existing filesystem and submit multi
 
 It is simple to get a read-only shell within the singularity container:
 
-    $ singularity shell singularity-dtiprep.img
+    ```$ singularity shell singularity-dtiprep.img```
 
 A writeable shell is useful for development, but changes made should be reflected back to
 the definition file `bootstrap_qa.def` for repeatability.
 
-    $ sudo singularity shell --writable singularity-dtiprep.img
+    ```$ sudo singularity shell --writable singularity-dtiprep.img```
