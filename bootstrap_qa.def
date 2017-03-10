@@ -1,26 +1,18 @@
 Bootstrap: docker
-From: maladmin/dtiprep-base:latest
+From: maladmin/jessie-dtiprep:latest
 
 %setup
 	echo "Installing runscript"
 	cp dtiprep.py ${SINGULARITY_ROOTFS}/opt/dtiprep.py
+	cp environment ${SINGULARITY_ROOTFS}/environment
 	exit 0
 
 %post
-	echo "Getting DTIPrep"
-	cd /opt
-	wget https://www.nitrc.org/frs/download.php/6630/DTIPrep1.2.4_linux64.tar.gz -O dtiprep.tar.gz
-	tar -xf dtiprep.tar.gz
-	rm dtiprep.tar.gz
-
-
-
 	echo "Making dtiprep.py runnable"
 	chmod 755 /opt/dtiprep.py
 
 	mkdir /input
 	mkdir /output
-
 	exit 0
 
 %runscript
@@ -28,13 +20,10 @@ From: maladmin/dtiprep-base:latest
 		then
 			echo "DTIPrep Container"
 			echo "USAGE:"
-			echo "singularity run <container> <subject_id>"
+			echo "singularity run <container> -B <nrrd_inputfolder>:/input/nrrd -B <nifiti_inputfolder>:/input/nii -B <outputfolder>:/output <subject_id>"
 			exit 1
 	fi
 	echo "Arguments received: $*"
-
-	echo "Setting path"
-	PATH=/opt/DTIPrepPackage:$PATH
 
 	echo "Running DTIPrep"
 	/opt/dtiprep.py "$1"

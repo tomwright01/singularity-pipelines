@@ -61,13 +61,13 @@ class QJob(object):
         subprocess.call('qsub < ' + self.qs_n, shell=True)
 
 
-def make_job(src_dir, dst_dir, nrrd_name, cleanup=True):
+def make_job(src_dir, dst_dir, scan_name, cleanup=True):
     # create a job file from template and use qsub to submit
-    code = ("singularity run -B {src_dir}:/input -B {dst_dir}:/output {container} {nrrd_name}"
+    code = ("singularity run -B {src_dir}:/input -B {dst_dir}:/output {container} {scan_name}"
             .format(src_dir=src_dir,
                     dst_dir=dst_dir,
                     container=CONTAINER,
-                    nrrd_name=nrrd_name))
+                    scan_name=scan_name))
 
     with QJob() as qjob:
         logfile = '{}:/tmp/output.$JOB_ID'.format(socket.gethostname())
@@ -84,7 +84,7 @@ def process_nrrd(src_dir, dst_dir, nrrd_file):
         logger.info('File:{} already processed, skipping.'
                     .format(nrrd_file))
         return
-    make_job(src_dir, dst_dir, nrrd_file)
+    make_job(src_dir, dst_dir, scan)
 
 
 def process_session(src_dir, out_dir, session):
@@ -108,6 +108,7 @@ def process_session(src_dir, out_dir, session):
         logger.warning('No DTI nrrd files found for session:{}'.format(session))
         return
     logger.info('Found {} DTI nrrd files.'.format(len(nrrd_dti)))
+
     if not os.path.isdir(out_dir):
         try:
             os.mkdir(out_dir)
@@ -133,14 +134,19 @@ if __name__ == '__main__':
 
     if not os.path.isdir(pipeline_path):
         logger.info("Creating output path:{}".format(pipeline_path))
+
+    try:
         os.mkdir(pipeline_path)
+    except OSError:
+        logger.error('Failed creating output dir:{}'.format(pipeline_path))
+        sys.exit(1)
 
     if not os.path.isdir(nrrd_path):
         logger.error("Src directory:{} not found".format(nrrd_path))
         sys.exit(1)
 
     if not args.session:
-        sessions = [os.path.join(nrrd_path, d) for d
+        sessions = [d for d
                     in os.listdir(nrrd_path)
                     if os.path.isdir(os.path.join(nrrd_path, d))]
     else:
