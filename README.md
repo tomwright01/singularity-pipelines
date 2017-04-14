@@ -47,8 +47,10 @@ The following has been tested on a system running Ubuntu 14.0.4
 ### Create a repo on docker hub
 
 The instructions below assume the repo is `maladmin/dtiprep-base`.
+
 - Login to docker hub
-    $ docker login
+
+    ```$ docker login```
 
 ### Create a docker image and upload to docker hub
 
@@ -58,19 +60,19 @@ additional libraries.
 
  - Build the docker image
 
-    $ docker build -t dtiprep-base .
+    ```$ docker build -t dtiprep-base .```
 
 - Find the *Image ID*
 
-    $ docker images
+    ```$ docker images```
 
 - Tag the image with the name of the repository
 
-    $ docker tag <image id> maladmin/dtiprep-base:latest
+    ```$ docker tag <image id> maladmin/dtiprep-base:latest```
 
 - Upload the image to docker hub
 
-    $ docker push maladmin/dtiprep-base
+    ```$ docker push maladmin/dtiprep-base```
 
 ### Create the singularity container
 
@@ -79,13 +81,13 @@ overwrite the existing container.
 
 - Create the empty container
 
-    $ sudo singularity create singularity-dtiprep.img
+    ```$ sudo singularity create singularity-dtiprep.img```
 
 The singularity container is defined in the file bootstrap_qa.def
 
 - Fill the container
 
-    $ sudo singularity bootstrap singularity-dtiprep.img bootstrap_qa.def
+    ```$ sudo singularity bootstrap singularity-dtiprep.img bootstrap_qa.def```
 
 ## Running the singularity container
 
@@ -100,17 +102,46 @@ The python script `dtiprep.py` uses two hard coded directories `/input` and `/ou
 These directories can be dynamically mapped to the host operating system when the container
 is run using the -B flag.
 
-    $ singularity run -B <path to input file>:/input -B <path to output>:/output singularity-dtiprep.img
+    ```$ singularity run -B <path to input file>:/input -B <path to output>:/output singularity-dtiprep.img```
 
 The file launch_dtiprep.py will process our existing filesystem and submit multiple jobs using qsub.
+
+### Creating the protocol file
+Using DTIPrep in batch mode requires a protocol file. The file is specific to the scanning protocol used.
+To create the protocol file based on a single subject:
+
+1. Create a local directory to store the protocol files
+
+`mkdir ~/protocols`
+
+2. Run the container in shell mode:
+
+`$ singularity shell -B <path_to_nrrd_file>:/input -B ~/protocols:/output <path_to_img>`
+
+3. Start the DTIPrep GUI
+
+`Singularity.dtiprep.img> $ DTIPrep`
+
+4. Load an example nrrd file by clicking the "load nrrd" button.
+
+5. Select the 'Protocol` tab and click `default`
+
+6. Modify the protocol as required:
+    * Enable "BRAINMASK_bCheck"
+    * Enable "DOMINANTDIRECTION_BCheck
+    * Set BRAINMASK_method: 1 (Slicer)
+
+6. Save the protocol.xml to `/output/protocol.xml`
+
+
 
 ## Notes
 
 It is simple to get a read-only shell within the singularity container:
 
-    $ singularity shell singularity-dtiprep.img
+    ```$ singularity shell singularity-dtiprep.img```
 
 A writeable shell is useful for development, but changes made should be reflected back to
 the definition file `bootstrap_qa.def` for repeatability.
 
-    $ sudo singularity shell --writable singularity-dtiprep.img
+    ```$ sudo singularity shell --writable singularity-dtiprep.img```
