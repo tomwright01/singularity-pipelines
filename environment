@@ -7,5 +7,8 @@ if test -z "$SINGULARITY_INIT"; then
     export PATH PS1 SINGULARITY_INIT
     PATH=/opt/DTIPrepPackage:$PATH
     PATH=/opt/Slicer-4.6.2-linux-amd64/bin:$PATH
-    PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6/cli-modules/:$PATH
+    PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6:$PATH
+    PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6/cli-modules:$PATH
+    PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Teem-1.12.0:$PATH
+    LD_LIBRARY_PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6:$LD_LIBRARY_PATH
 fi

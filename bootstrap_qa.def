@@ -13,6 +13,7 @@ From: maladmin/jessie-dtiprep:latest
 
 	mkdir /input
 	mkdir /output
+	mkdir /meta
 	exit 0
 
 %runscript
@@ -20,9 +21,16 @@ From: maladmin/jessie-dtiprep:latest
 		then
 			echo "DTIPrep Container"
 			echo "USAGE:"
-			echo "singularity run <container> -B <nrrd_inputfolder>:/input/nrrd -B <nifiti_inputfolder>:/input/nii -B <outputfolder>:/output <subject_id>"
+			echo "singularity run <container> -B <nrrd_inputfolder>:/input -B <outputfolder>:/output -B<metafolder>:/meta <subject_id>"
 			exit 1
 	fi
+	export LD_LIBRARY_PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6
+	export LD_LIBRARY_PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Teem-1.12.0:$LD_LIBRARY_PATH
+	export LD_LIBRARY_PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Python/lib:$LD_LIBRARY_PATH
+	export LD_LIBRARY_PATH=/opt/25516-linux-amd64-SlicerDMRI-gitce15576-2016-10-26/lib:$LD_LIBRARY_PATH
+	export LD_LIBRARY_PATH=/opt/25516-linux-amd64-SlicerDMRI-gitce15576-2016-10-26/lib/vtkDMRI:$LD_LIBRARY_PATH
+	export LD_LIBRARY_PATH=/opt/25516-linux-amd64-SlicerDMRI-gitce15576-2016-10-26/lib/Slicer-4.6/cli-modules/:$LD_LIBRARY_PATH
+	
 	echo "Arguments received: $*"
 
 	echo "Running DTIPrep"
