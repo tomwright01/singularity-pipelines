@@ -106,6 +106,35 @@ is run using the -B flag.
 
 The file launch_dtiprep.py will process our existing filesystem and submit multiple jobs using qsub.
 
+### Creating the protocol file
+Using DTIPrep in batch mode requires a protocol file. The file is specific to the scanning protocol used.
+To create the protocol file based on a single subject:
+
+1. Create a local directory to store the protocol files
+
+`mkdir ~/protocols`
+
+2. Run the container in shell mode:
+
+`$ singularity shell -B <path_to_nrrd_file>:/input -B ~/protocols:/output <path_to_img>`
+
+3. Start the DTIPrep GUI
+
+`Singularity.dtiprep.img> $ DTIPrep`
+
+4. Load an example nrrd file by clicking the "load nrrd" button.
+
+5. Select the 'Protocol` tab and click `default`
+
+6. Modify the protocol as required:
+    * Enable "BRAINMASK_bCheck"
+    * Enable "DOMINANTDIRECTION_BCheck
+    * Set BRAINMASK_method: 1 (Slicer)
+
+6. Save the protocol.xml to `/output/protocol.xml`
+
+
+
 ## Notes
 
 It is simple to get a read-only shell within the singularity container:
