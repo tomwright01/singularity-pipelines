@@ -3,12 +3,21 @@
 if test -z "$SINGULARITY_INIT"; then
     PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
     PS1="Singularity.$SINGULARITY_CONTAINER> $PS1"
-    SINGULARITY_INIT=1
-    export PATH PS1 SINGULARITY_INIT
+
     PATH=/opt/DTIPrepPackage:$PATH
     PATH=/opt/Slicer-4.6.2-linux-amd64/bin:$PATH
     PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6:$PATH
     PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6/cli-modules:$PATH
     PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Teem-1.12.0:$PATH
+
     LD_LIBRARY_PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6:$LD_LIBRARY_PATH
+    LD_LIBRARY_PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Slicer-4.6
+  	LD_LIBRARY_PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Teem-1.12.0:$LD_LIBRARY_PATH
+  	LD_LIBRARY_PATH=/opt/Slicer-4.6.2-linux-amd64/lib/Python/lib:$LD_LIBRARY_PATH
+  	LD_LIBRARY_PATH=/opt/25516-linux-amd64-SlicerDMRI-gitce15576-2016-10-26/lib:$LD_LIBRARY_PATH
+  	LD_LIBRARY_PATH=/opt/25516-linux-amd64-SlicerDMRI-gitce15576-2016-10-26/lib/vtkDMRI:$LD_LIBRARY_PATH
+  	LD_LIBRARY_PATH=/opt/25516-linux-amd64-SlicerDMRI-gitce15576-2016-10-26/lib/Slicer-4.6/cli-modules/:$LD_LIBRARY_PATH
+    
+    SINGULARITY_INIT=1
+    export PATH PS1 SINGULARITY_INIT LD_LIBRARY_PATH
 fi
